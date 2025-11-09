@@ -191,4 +191,44 @@ export class UIManager {
     showMessage(message, type = 'neutral') {
         this.addEvent('📢 Info', message, type);
     }
+
+    showAchievement(achievement) {
+        // Create achievement notification
+        const notification = document.createElement('div');
+        notification.className = 'achievement-notification';
+        notification.innerHTML = `
+            <div class="achievement-icon">🏆</div>
+            <div class="achievement-content">
+                <div class="achievement-title">${achievement.title}</div>
+                <div class="achievement-desc">${achievement.description}</div>
+            </div>
+        `;
+
+        // Add to body
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        // Remove after 5 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
+
+        // Also add to event feed
+        let rewardText = '';
+        if (achievement.reward) {
+            const rewards = Object.entries(achievement.reward)
+                .map(([resource, amount]) => `+${amount} ${resource}`)
+                .join(', ');
+            rewardText = ` Récompenses: ${rewards}`;
+        }
+
+        this.addEvent(
+            `🏆 ${achievement.title}`,
+            `${achievement.description}${rewardText}`,
+            'positive'
+        );
+    }
 }

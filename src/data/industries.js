@@ -198,6 +198,243 @@ export const INDUSTRIES = {
         requiresInfluence: 55,
         unlocked: false,
         count: 0
+    },
+
+    // New industries - Extended content
+    restaurant: {
+        id: 'restaurant',
+        name: 'Restaurant gastronomique',
+        description: 'Cuisine raffinée. Produit $75/s',
+        icon: '🍽️',
+        baseCost: { wealth: 8000 },
+        baseIncome: 75,
+        baseEnvironmentalImpact: -0.15,
+        baseMoralityImpact: 0.3,
+        costMultiplier: 1.18,
+        requiresWealth: 3000,
+        unlocked: false,
+        count: 0
+    },
+
+    miningOperation: {
+        id: 'miningOperation',
+        name: 'Exploitation minière',
+        description: 'Extraction de ressources. Produit $500/s',
+        icon: '⛏️',
+        baseCost: { wealth: 75000 },
+        baseIncome: 500,
+        baseEnvironmentalImpact: -1.5,
+        baseMoralityImpact: -0.5,
+        costMultiplier: 1.28,
+        requiresWealth: 30000,
+        unlocked: false,
+        count: 0
+    },
+
+    recyclePlant: {
+        id: 'recyclePlant',
+        name: 'Usine de recyclage',
+        description: 'Transformation de déchets. Produit $300/s',
+        icon: '♻️',
+        baseCost: { wealth: 120000 },
+        baseIncome: 300,
+        baseEnvironmentalImpact: 1.5,
+        baseMoralityImpact: 1.2,
+        costMultiplier: 1.22,
+        requiresWealth: 50000,
+        unlocked: false,
+        count: 0
+    },
+
+    windFarm: {
+        id: 'windFarm',
+        name: 'Parc éolien',
+        description: 'Énergie renouvelable. Produit $600/s',
+        icon: '💨',
+        baseCost: { wealth: 200000 },
+        baseIncome: 600,
+        baseEnvironmentalImpact: 1.2,
+        baseMoralityImpact: 1,
+        costMultiplier: 1.23,
+        requiresWealth: 80000,
+        unlocked: false,
+        count: 0
+    },
+
+    mediaEmpire: {
+        id: 'mediaEmpire',
+        name: 'Empire médiatique',
+        description: 'Contrôle de l\'information. Produit $2500/s',
+        icon: '📺',
+        baseCost: { wealth: 2000000 },
+        baseIncome: 2500,
+        baseEnvironmentalImpact: -0.3,
+        baseMoralityImpact: -1,
+        costMultiplier: 1.28,
+        requiresWealth: 800000,
+        requiresInfluence: 35,
+        unlocked: false,
+        count: 0
+    },
+
+    hospital: {
+        id: 'hospital',
+        name: 'Hôpital privé',
+        description: 'Soins de santé premium. Produit $4000/s',
+        icon: '🏥',
+        baseCost: { wealth: 6000000 },
+        baseIncome: 4000,
+        baseEnvironmentalImpact: -0.4,
+        baseMoralityImpact: 3,
+        costMultiplier: 1.24,
+        requiresWealth: 2500000,
+        requiresInfluence: 30,
+        unlocked: false,
+        count: 0
+    },
+
+    luxuryBrand: {
+        id: 'luxuryBrand',
+        name: 'Marque de luxe',
+        description: 'Produits haut de gamme. Produit $8000/s',
+        icon: '👜',
+        baseCost: { wealth: 12000000 },
+        baseIncome: 8000,
+        baseEnvironmentalImpact: -1,
+        baseMoralityImpact: -0.5,
+        costMultiplier: 1.3,
+        requiresWealth: 5000000,
+        requiresInfluence: 45,
+        unlocked: false,
+        count: 0
+    },
+
+    realEstate: {
+        id: 'realEstate',
+        name: 'Empire immobilier',
+        description: 'Investissement foncier. Produit $6000/s',
+        icon: '🏢',
+        baseCost: { wealth: 15000000 },
+        baseIncome: 6000,
+        baseEnvironmentalImpact: -0.8,
+        baseMoralityImpact: -0.3,
+        costMultiplier: 1.26,
+        requiresWealth: 6000000,
+        requiresInfluence: 40,
+        unlocked: false,
+        count: 0
+    },
+
+    cryptoMining: {
+        id: 'cryptoMining',
+        name: 'Minage de crypto',
+        description: 'Ferme de cryptomonnaie. Produit $12000/s',
+        icon: '₿',
+        baseCost: { wealth: 20000000 },
+        baseIncome: 12000,
+        baseEnvironmentalImpact: -3,
+        baseMoralityImpact: -0.8,
+        costMultiplier: 1.35,
+        requiresWealth: 10000000,
+        requiresInfluence: 50,
+        unlocked: false,
+        count: 0
+    },
+
+    oceanCleanup: {
+        id: 'oceanCleanup',
+        name: 'Nettoyage des océans',
+        description: 'Projet environnemental. Produit $3000/s',
+        icon: '🌊',
+        baseCost: { wealth: 25000000 },
+        baseIncome: 3000,
+        baseEnvironmentalImpact: 3,
+        baseMoralityImpact: 5,
+        costMultiplier: 1.2,
+        requiresWealth: 12000000,
+        requiresInfluence: 60,
+        unlocked: false,
+        count: 0
+    },
+
+    quantumComputing: {
+        id: 'quantumComputing',
+        name: 'Calcul quantique',
+        description: 'Technologie de pointe. Produit $25000/s',
+        icon: '⚛️',
+        baseCost: { wealth: 80000000 },
+        baseIncome: 25000,
+        baseEnvironmentalImpact: -1.2,
+        baseMoralityImpact: 1,
+        costMultiplier: 1.32,
+        requiresWealth: 40000000,
+        requiresInfluence: 70,
+        unlocked: false,
+        count: 0
+    },
+
+    geneticsLab: {
+        id: 'geneticsLab',
+        name: 'Laboratoire génétique',
+        description: 'Biotechnologie avancée. Produit $18000/s',
+        icon: '🧬',
+        baseCost: { wealth: 60000000 },
+        baseIncome: 18000,
+        baseEnvironmentalImpact: -0.6,
+        baseMoralityImpact: -2,
+        costMultiplier: 1.28,
+        requiresWealth: 30000000,
+        requiresInfluence: 65,
+        unlocked: false,
+        count: 0
+    },
+
+    fusionReactor: {
+        id: 'fusionReactor',
+        name: 'Réacteur à fusion',
+        description: 'Énergie du futur. Produit $30000/s',
+        icon: '⚡',
+        baseCost: { wealth: 100000000 },
+        baseIncome: 30000,
+        baseEnvironmentalImpact: 2,
+        baseMoralityImpact: 2,
+        costMultiplier: 1.35,
+        requiresWealth: 50000000,
+        requiresInfluence: 75,
+        unlocked: false,
+        count: 0
+    },
+
+    martianColony: {
+        id: 'martianColony',
+        name: 'Colonie martienne',
+        description: 'Expansion interplanétaire. Produit $50000/s',
+        icon: '🔴',
+        baseCost: { wealth: 500000000 },
+        baseIncome: 50000,
+        baseEnvironmentalImpact: 0,
+        baseMoralityImpact: 3,
+        costMultiplier: 1.5,
+        requiresWealth: 200000000,
+        requiresInfluence: 85,
+        unlocked: false,
+        count: 0
+    },
+
+    globalNetwork: {
+        id: 'globalNetwork',
+        name: 'Réseau global',
+        description: 'Internet satellitaire mondial. Produit $40000/s',
+        icon: '🛰️',
+        baseCost: { wealth: 200000000 },
+        baseIncome: 40000,
+        baseEnvironmentalImpact: -1,
+        baseMoralityImpact: 1.5,
+        costMultiplier: 1.38,
+        requiresWealth: 100000000,
+        requiresInfluence: 80,
+        unlocked: false,
+        count: 0
     }
 };
 

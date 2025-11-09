@@ -261,6 +261,325 @@ export const EVENTS = {
                 outcome: 'Tu élimines la concurrence en l\'avalant.'
             }
         ]
+    },
+
+    // New events - Extended content
+    taxAudit: {
+        id: 'taxAudit',
+        title: '🔍 Contrôle fiscal',
+        description: 'L\'administration fiscale audite tes comptes. As-tu été honnête ?',
+        type: 'negative',
+        triggerCondition: (game) => {
+            return game.resources.get('wealth') > 500000 &&
+                   game.resources.get('morality') < 60 &&
+                   !game.triggeredEvents.has('taxAudit');
+        },
+        choices: [
+            {
+                text: 'Tout déclarer honnêtement',
+                cost: { wealth: 100000 },
+                effects: { morality: 10, stability: 5 },
+                outcome: 'Tu paies tes impôts. Ton image s\'améliore.'
+            },
+            {
+                text: 'Optimisation fiscale agressive ($50000)',
+                cost: { wealth: 50000 },
+                effects: { morality: -5, influence: 3 },
+                outcome: 'Tu exploites les failles légales. Risqué mais profitable.'
+            },
+            {
+                text: 'Corruption des auditeurs ($30000)',
+                cost: { wealth: 30000 },
+                effects: { morality: -15, stability: -5 },
+                outcome: 'Le contrôle se termine miraculeusement bien...'
+            }
+        ]
+    },
+
+    whistleblower: {
+        id: 'whistleblower',
+        title: '📢 Lanceur d\'alerte',
+        description: 'Un employé menace de révéler tes pratiques secrètes à la presse.',
+        type: 'negative',
+        triggerCondition: (game) => {
+            return game.resources.get('morality') < 30 &&
+                   game.resources.get('wealth') > 2000000 &&
+                   !game.triggeredEvents.has('whistleblower');
+        },
+        choices: [
+            {
+                text: 'Négocier un accord de confidentialité ($200000)',
+                cost: { wealth: 200000 },
+                effects: { morality: -5, stability: 2 },
+                outcome: 'Le silence s\'achète... pour le moment.'
+            },
+            {
+                text: 'Licencier et décrédibiliser',
+                cost: {},
+                effects: { morality: -10, stability: -8, influence: -5 },
+                outcome: 'Tu le fais taire, mais d\'autres pourraient suivre.'
+            },
+            {
+                text: 'Assumer et réformer ($500000)',
+                cost: { wealth: 500000 },
+                effects: { morality: 15, stability: 10 },
+                outcome: 'Tu reconnais tes erreurs et changes tes pratiques.'
+            }
+        ]
+    },
+
+    climateProtests: {
+        id: 'climateProtests',
+        title: '🌍 Manifestations climatiques',
+        description: 'Des milliers de militants bloquent tes installations pour protester contre ta pollution.',
+        type: 'negative',
+        triggerCondition: (game) => {
+            return game.resources.get('environment') < 40 &&
+                   game.resources.get('influence') > 40 &&
+                   !game.triggeredEvents.has('climateProtests');
+        },
+        choices: [
+            {
+                text: 'Plan de transition verte ($1M)',
+                cost: { wealth: 1000000 },
+                effects: { environment: 15, morality: 10, stability: 8 },
+                outcome: 'Tu annonces un plan de transition écologique ambitieux.'
+            },
+            {
+                text: 'Répression policière',
+                cost: {},
+                effects: { morality: -15, stability: -10, environment: -5 },
+                outcome: 'Tu brises le mouvement par la force. Ton image est ruinée.'
+            },
+            {
+                text: 'Dialogue et compromis ($300000)',
+                cost: { wealth: 300000 },
+                effects: { environment: 8, morality: 5, stability: 5 },
+                outcome: 'Tu négocies des compromis acceptables.'
+            }
+        ]
+    },
+
+    hackAttack: {
+        id: 'hackAttack',
+        title: '💻 Cyberattaque',
+        description: 'Des hackers ont infiltré tes systèmes et menacent de tout publier.',
+        type: 'negative',
+        triggerCondition: (game) => {
+            return game.resources.get('wealth') > 5000000 &&
+                   !game.triggeredEvents.has('hackAttack');
+        },
+        choices: [
+            {
+                text: 'Payer la rançon ($500000)',
+                cost: { wealth: 500000 },
+                effects: { morality: -5, stability: -3 },
+                outcome: 'Tu paies. Les données ne fuient pas... cette fois.'
+            },
+            {
+                text: 'Refuser et renforcer la sécurité ($800000)',
+                cost: { wealth: 800000 },
+                effects: { morality: 5, stability: 5 },
+                outcome: 'Tu refuses de céder au chantage et sécurises tout.'
+            },
+            {
+                text: 'Contre-attaque cyber ($300000)',
+                cost: { wealth: 300000 },
+                effects: { morality: -8, influence: 5 },
+                outcome: 'Tu engages des hackers pour riposter.'
+            }
+        ]
+    },
+
+    celebrityEndorsement: {
+        id: 'celebrityEndorsement',
+        title: '⭐ Soutien de célébrité',
+        description: 'Une célébrité influente veut soutenir publiquement ton empire.',
+        type: 'positive',
+        triggerCondition: (game) => {
+            return game.resources.get('influence') > 50 &&
+                   game.resources.get('morality') > 60 &&
+                   !game.triggeredEvents.has('celebrityEndorsement');
+        },
+        choices: [
+            {
+                text: 'Accepter gracieusement',
+                cost: {},
+                effects: { influence: 10, wealth: 250000 },
+                outcome: 'Le soutien de la star booste ton image et tes ventes.'
+            },
+            {
+                text: 'Partenariat payant ($500000)',
+                cost: { wealth: 500000 },
+                effects: { influence: 20, wealth: 800000 },
+                outcome: 'Investissement massif qui rapporte gros.'
+            },
+            {
+                text: 'Refuser poliment',
+                cost: {},
+                effects: { morality: 5 },
+                outcome: 'Ton humilité est remarquée.'
+            }
+        ]
+    },
+
+    naturalDisaster: {
+        id: 'naturalDisaster',
+        title: '🌪️ Catastrophe naturelle',
+        description: 'Un ouragan dévaste une région où tu as des installations.',
+        type: 'negative',
+        triggerCondition: (game) => {
+            return game.resources.get('wealth') > 3000000 &&
+                   !game.triggeredEvents.has('naturalDisaster');
+        },
+        choices: [
+            {
+                text: 'Aide d\'urgence massive ($1M)',
+                cost: { wealth: 1000000 },
+                effects: { morality: 15, influence: 10, stability: 8 },
+                outcome: 'Ta générosité fait la une. Tu es un héros.'
+            },
+            {
+                text: 'Aide minimale ($200000)',
+                cost: { wealth: 200000 },
+                effects: { morality: 2, stability: 1 },
+                outcome: 'Tu fais le minimum requis.'
+            },
+            {
+                text: 'Profiter pour reconstruire en mieux ($2M)',
+                cost: { wealth: 2000000 },
+                effects: { wealth: 500000, environment: 10, morality: 8 },
+                outcome: 'Tu reconstruis écologiquement et profits des subventions.'
+            }
+        ]
+    },
+
+    blackmail: {
+        id: 'blackmail',
+        title: '📸 Chantage',
+        description: 'Quelqu\'un possède des informations compromettantes sur toi.',
+        type: 'negative',
+        triggerCondition: (game) => {
+            return game.resources.get('morality') < 40 &&
+                   game.resources.get('wealth') > 10000000 &&
+                   !game.triggeredEvents.has('blackmail');
+        },
+        choices: [
+            {
+                text: 'Payer le silence ($2M)',
+                cost: { wealth: 2000000 },
+                effects: { morality: -5, stability: -2 },
+                outcome: 'Tu paies. Le chantage pourrait recommencer.'
+            },
+            {
+                text: 'Tout révéler toi-même',
+                cost: {},
+                effects: { morality: 10, influence: -10, stability: -5 },
+                outcome: 'Tu prends les devants. C\'est douloureux mais libérateur.'
+            },
+            {
+                text: 'Éliminer le problème ($500000)',
+                cost: { wealth: 500000 },
+                effects: { morality: -20, stability: 5 },
+                outcome: 'Le maître chanteur "disparaît" mystérieusement.'
+            }
+        ]
+    },
+
+    investorInterest: {
+        id: 'investorInterest',
+        title: '💼 Investisseurs intéressés',
+        description: 'Un grand fonds d\'investissement veut entrer dans ton capital.',
+        type: 'positive',
+        triggerCondition: (game) => {
+            return game.resources.get('wealth') > 5000000 &&
+                   game.resources.get('influence') > 45 &&
+                   !game.triggeredEvents.has('investorInterest');
+        },
+        choices: [
+            {
+                text: 'Accepter ($5M d\'injection)',
+                cost: {},
+                effects: { wealth: 5000000, influence: 10, morality: -3 },
+                outcome: 'Tu gagnes de l\'argent mais perds de l\'indépendance.'
+            },
+            {
+                text: 'Refuser et rester indépendant',
+                cost: {},
+                effects: { morality: 5, influence: -2 },
+                outcome: 'Tu gardes le contrôle total de ton empire.'
+            },
+            {
+                text: 'Négocier des termes favorables',
+                cost: {},
+                effects: { wealth: 3000000, influence: 8 },
+                outcome: 'Bon compromis entre argent et contrôle.'
+            }
+        ]
+    },
+
+    unionFormation: {
+        id: 'unionFormation',
+        title: '✊ Formation de syndicat',
+        description: 'Tes employés veulent former un syndicat pour défendre leurs droits.',
+        type: 'neutral',
+        triggerCondition: (game) => {
+            return game.resources.get('stability') < 70 &&
+                   game.resources.get('wealth') > 1000000 &&
+                   !game.triggeredEvents.has('unionFormation');
+        },
+        choices: [
+            {
+                text: 'Soutenir la formation',
+                cost: {},
+                effects: { morality: 10, stability: 15, wealth: -50000 },
+                outcome: 'Tu gagnes le respect mais acceptes des coûts plus élevés.'
+            },
+            {
+                text: 'Négocier des compromis',
+                cost: {},
+                effects: { morality: 3, stability: 8 },
+                outcome: 'Compromis acceptable pour tous.'
+            },
+            {
+                text: 'Combattre la syndicalisation',
+                cost: { wealth: 100000 },
+                effects: { morality: -10, stability: -10, influence: 5 },
+                outcome: 'Tu brises le mouvement mais créés du ressentiment.'
+            }
+        ]
+    },
+
+    technologyBreakthrough: {
+        id: 'technologyBreakthrough',
+        title: '🔬 Percée technologique',
+        description: 'Ton équipe R&D a fait une découverte révolutionnaire !',
+        type: 'positive',
+        triggerCondition: (game) => {
+            return game.resources.get('wealth') > 10000000 &&
+                   game.resources.get('influence') > 55 &&
+                   !game.triggeredEvents.has('technologyBreakthrough');
+        },
+        choices: [
+            {
+                text: 'Breveter et commercialiser',
+                cost: {},
+                effects: { wealth: 5000000, influence: 15, morality: -2 },
+                outcome: 'Tu monopolises la technologie et fais fortune.'
+            },
+            {
+                text: 'Open source pour tous',
+                cost: {},
+                effects: { morality: 20, influence: 25, environment: 10 },
+                outcome: 'Tu changes le monde. Ton nom entre dans l\'histoire.'
+            },
+            {
+                text: 'Vendre aux enchères ($10M)',
+                cost: {},
+                effects: { wealth: 10000000, morality: -5 },
+                outcome: 'Tu vends au plus offrant.'
+            }
+        ]
     }
 };
 

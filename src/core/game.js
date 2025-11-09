@@ -1,6 +1,8 @@
 // Moteur de jeu principal
 import { ResourceSystem } from '../systems/resources.js';
 import { DecisionSystem } from '../systems/decisions.js';
+import { AchievementSystem } from '../systems/achievements.js';
+import { StatisticsSystem } from '../systems/statistics.js';
 import { UIManager } from '../ui/dashboard.js';
 import { INDUSTRIES, getIndustryCost, checkUnlock, getTotalIncome, getTotalEnvironmentalImpact } from '../data/industries.js';
 import { EVENTS, generateDynamicEvent } from '../data/events.js';
@@ -9,6 +11,8 @@ class GameEngine {
     constructor() {
         this.resources = new ResourceSystem();
         this.decisions = new DecisionSystem(this);
+        this.achievements = new AchievementSystem(this);
+        this.statistics = new StatisticsSystem(this);
         this.industries = JSON.parse(JSON.stringify(INDUSTRIES)); // Deep copy
         this.events = EVENTS;
         this.triggeredEvents = new Set();
@@ -97,6 +101,12 @@ class GameEngine {
         // Update environmental decay from industries
         const totalEnvironmentalImpact = getTotalEnvironmentalImpact(this.industries);
         this.resources.setEnvironmentalDecay(-totalEnvironmentalImpact);
+
+        // Update achievements
+        this.achievements.update(deltaTime);
+
+        // Update statistics
+        this.statistics.update(deltaTime);
     }
 
     checkForEvents() {
@@ -122,6 +132,9 @@ class GameEngine {
 
     triggerEvent(event) {
         console.log('🎲 Event triggered:', event.title);
+
+        // Record event stats
+        this.statistics.recordEventTriggered(event.type);
 
         if (event.choices) {
             // Decision event
@@ -160,6 +173,10 @@ class GameEngine {
             this.resources.add('morality', industry.baseMoralityImpact);
         }
 
+        // Record stats
+        this.statistics.recordIndustryBought();
+        this.statistics.recordMoneySpent(cost.wealth || 0);
+
         // Add notification
         this.ui.showMessage(
             `${industry.icon} ${industry.name} achetée ! Revenue: +${industry.baseIncome}/s`,
@@ -195,6 +212,8 @@ class GameEngine {
             resources: this.resources.save(),
             industries: {},
             decisions: this.decisions.save(),
+            achievements: this.achievements.save(),
+            statistics: this.statistics.save(),
             triggeredEvents: Array.from(this.triggeredEvents),
             timestamp: Date.now()
         };
@@ -237,6 +256,16 @@ class GameEngine {
             // Load decisions
             if (data.decisions) {
                 this.decisions.load(data.decisions);
+            }
+
+            // Load achievements
+            if (data.achievements) {
+                this.achievements.load(data.achievements);
+            }
+
+            // Load statistics
+            if (data.statistics) {
+                this.statistics.load(data.statistics);
             }
 
             // Load triggered events
