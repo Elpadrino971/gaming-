@@ -1,0 +1,29 @@
+{
+  "name": "life-empire",
+  "version": "0.1.0",
+  "description": "Life Empire - Rise & Consequence: A moral and environmental empire management game",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "start": "python3 -m http.server 8000",
+    "build": "echo 'No build step required for now'",
+    "test": "echo 'Tests coming soon'"
+  },
+  "keywords": [
+    "game",
+    "incremental",
+    "idle",
+    "strategy",
+    "management",
+    "ai-narrative",
+    "moral-choices"
+  ],
+  "author": "Life Empire Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Elpadrino971/gaming-"
+  }
+}
