@@ -231,4 +231,144 @@ export class UIManager {
             'positive'
         );
     }
+
+    showTutorialMessage(step) {
+        // Remove existing tutorial overlay
+        const existing = document.getElementById('tutorialOverlay');
+        if (existing) existing.remove();
+
+        // Create tutorial overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'tutorialOverlay';
+        overlay.className = 'tutorial-overlay';
+        overlay.innerHTML = `
+            <div class="tutorial-box">
+                <div class="tutorial-header">
+                    <h3>${step.title}</h3>
+                    <button class="tutorial-skip" onclick="game.tutorial.skipTutorial()">Passer ×</button>
+                </div>
+                <div class="tutorial-message">${step.message}</div>
+                <div class="tutorial-actions">
+                    ${step.waitForAction ?
+                        '<div class="tutorial-hint">Effectue cette action pour continuer</div>' :
+                        '<button class="btn tutorial-next" onclick="game.tutorial.nextStep()">Suivant →</button>'
+                    }
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        setTimeout(() => overlay.classList.add('show'), 10);
+    }
+
+    showAchievementsPanel() {
+        const categories = this.game.achievements.getAchievementsByCategory();
+        const progress = this.game.achievements.getProgress();
+
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content achievements-modal">
+                <div class="modal-header">
+                    <h2>🏆 Succès</h2>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: ${progress.percentage}%"></div>
+                        <span class="progress-text">${progress.unlocked}/${progress.total} (${Math.round(progress.percentage)}%)</span>
+                    </div>
+                    <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button>
+                </div>
+                <div class="modal-body">
+                    ${Object.entries(categories).map(([category, data]) => `
+                        <div class="achievement-category">
+                            <h3>${this.getCategoryName(category)} (${data.unlocked}/${data.total})</h3>
+                            <div class="achievement-grid">
+                                ${data.achievements.map(achievement => {
+                                    const unlocked = this.game.achievements.unlockedAchievements.has(achievement.id);
+                                    return `
+                                        <div class="achievement-card ${unlocked ? 'unlocked' : 'locked'}">
+                                            <div class="achievement-card-icon">${unlocked ? '🏆' : '🔒'}</div>
+                                            <div class="achievement-card-title">${achievement.title}</div>
+                                            <div class="achievement-card-desc">${achievement.description}</div>
+                                            ${achievement.reward && unlocked ?
+                                                `<div class="achievement-reward">
+                                                    ${Object.entries(achievement.reward).map(([r, v]) => `+${v} ${r}`).join(', ')}
+                                                </div>` : ''
+                                            }
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    showStatisticsPanel() {
+        const stats = this.game.statistics.getFormattedStats();
+        const score = this.game.statistics.getScoreCalculation();
+        const rank = this.game.statistics.getRank();
+
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content statistics-modal">
+                <div class="modal-header">
+                    <h2>📊 Statistiques</h2>
+                    <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="rank-display">
+                        <div class="rank-icon">${rank.icon}</div>
+                        <div class="rank-info">
+                            <div class="rank-title">${rank.rank}</div>
+                            <div class="rank-score">Score: ${score.total.toLocaleString()} pts</div>
+                        </div>
+                    </div>
+
+                    <div class="score-breakdown">
+                        <h3>Détail du score</h3>
+                        ${Object.entries(score.breakdown).map(([key, value]) => `
+                            <div class="score-item">
+                                <span class="score-label">${key}</span>
+                                <span class="score-value">${value} pts</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="stats-grid">
+                        <h3>Statistiques de partie</h3>
+                        ${Object.entries(stats).map(([key, value]) => `
+                            <div class="stat-row">
+                                <span class="stat-label">${key}</span>
+                                <span class="stat-value">${value}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    getCategoryName(category) {
+        const names = {
+            wealth: '💰 Richesse',
+            environment: '🌍 Environnement',
+            morality: '⚖️ Moralité',
+            industry: '🏭 Industries',
+            decision: '🎯 Décisions',
+            special: '✨ Spéciaux',
+            time: '⏰ Temps',
+            income: '💸 Revenus',
+            profile: '🎭 Profils'
+        };
+        return names[category] || category;
+    }
 }

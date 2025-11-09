@@ -3,6 +3,7 @@ import { ResourceSystem } from '../systems/resources.js';
 import { DecisionSystem } from '../systems/decisions.js';
 import { AchievementSystem } from '../systems/achievements.js';
 import { StatisticsSystem } from '../systems/statistics.js';
+import { TutorialSystem } from '../systems/tutorial.js';
 import { UIManager } from '../ui/dashboard.js';
 import { INDUSTRIES, getIndustryCost, checkUnlock, getTotalIncome, getTotalEnvironmentalImpact } from '../data/industries.js';
 import { EVENTS, generateDynamicEvent } from '../data/events.js';
@@ -13,6 +14,7 @@ class GameEngine {
         this.decisions = new DecisionSystem(this);
         this.achievements = new AchievementSystem(this);
         this.statistics = new StatisticsSystem(this);
+        this.tutorial = new TutorialSystem(this);
         this.industries = JSON.parse(JSON.stringify(INDUSTRIES)); // Deep copy
         this.events = EVENTS;
         this.triggeredEvents = new Set();
@@ -177,6 +179,11 @@ class GameEngine {
         this.statistics.recordIndustryBought();
         this.statistics.recordMoneySpent(cost.wealth || 0);
 
+        // Tutorial check
+        if (this.tutorial.active && industry.id === 'lemonade' && industry.count === 1) {
+            this.tutorial.onFirstIndustryBought();
+        }
+
         // Add notification
         this.ui.showMessage(
             `${industry.icon} ${industry.name} achetée ! Revenue: +${industry.baseIncome}/s`,
@@ -214,6 +221,7 @@ class GameEngine {
             decisions: this.decisions.save(),
             achievements: this.achievements.save(),
             statistics: this.statistics.save(),
+            tutorial: this.tutorial.save(),
             triggeredEvents: Array.from(this.triggeredEvents),
             timestamp: Date.now()
         };
@@ -266,6 +274,11 @@ class GameEngine {
             // Load statistics
             if (data.statistics) {
                 this.statistics.load(data.statistics);
+            }
+
+            // Load tutorial
+            if (data.tutorial) {
+                this.tutorial.load(data.tutorial);
             }
 
             // Load triggered events
