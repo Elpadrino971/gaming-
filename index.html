@@ -70,12 +70,31 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-green));
+            border-radius: 12px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
         }
 
         .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .metric-card:hover::after {
+            opacity: 0.2;
         }
 
         .metric-card h3 {
@@ -160,12 +179,32 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .industry-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--accent-gold), transparent);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .industry-item:hover::before {
+            transform: scaleY(1);
         }
 
         .industry-item:hover {
             border-color: var(--accent-gold);
-            transform: translateX(5px);
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, var(--bg-medium), rgba(255, 215, 0, 0.05));
         }
 
         .industry-info h4 {
@@ -207,21 +246,50 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             text-transform: uppercase;
             font-size: 0.9em;
             letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         .event-feed {
@@ -379,11 +447,80 @@
         /* Animations */
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.1); }
         }
 
         .metric-card.pulse {
-            animation: pulse 0.5s ease;
+            animation: pulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px var(--accent-gold); }
+            50% { box-shadow: 0 0 20px var(--accent-gold), 0 0 30px var(--accent-gold); }
+        }
+
+        .glow {
+            animation: glow 2s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .achievement-notification {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .industry-item {
+            animation: slideInRight 0.3s ease forwards;
+            opacity: 0;
+        }
+
+        .industry-item:nth-child(1) { animation-delay: 0.05s; }
+        .industry-item:nth-child(2) { animation-delay: 0.1s; }
+        .industry-item:nth-child(3) { animation-delay: 0.15s; }
+        .industry-item:nth-child(4) { animation-delay: 0.2s; }
+        .industry-item:nth-child(5) { animation-delay: 0.25s; }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .btn-small {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-small:hover {
+            animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         /* Responsive improvements */
@@ -770,8 +907,18 @@
             <div class="header-buttons">
                 <button class="btn btn-achievements" onclick="game.ui.showAchievementsPanel()">🏆 Succès</button>
                 <button class="btn btn-statistics" onclick="game.ui.showStatisticsPanel()">📊 Stats</button>
+                <button class="btn btn-sound" id="soundToggle" onclick="toggleSound()">🔊 Son</button>
             </div>
         </header>
+
+        <script>
+            function toggleSound() {
+                if (window.game && window.game.sound) {
+                    const enabled = window.game.sound.toggle();
+                    document.getElementById('soundToggle').textContent = enabled ? '🔊 Son' : '🔇 Muet';
+                }
+            }
+        </script>
 
         <div class="profile-indicator">
             <div class="profile-label">Ton profil</div>

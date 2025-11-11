@@ -4,6 +4,8 @@ import { DecisionSystem } from '../systems/decisions.js';
 import { AchievementSystem } from '../systems/achievements.js';
 import { StatisticsSystem } from '../systems/statistics.js';
 import { TutorialSystem } from '../systems/tutorial.js';
+import { VFXSystem } from '../systems/vfx.js';
+import { SoundSystem } from '../systems/sound.js';
 import { UIManager } from '../ui/dashboard.js';
 import { INDUSTRIES, getIndustryCost, checkUnlock, getTotalIncome, getTotalEnvironmentalImpact } from '../data/industries.js';
 import { EVENTS, generateDynamicEvent } from '../data/events.js';
@@ -15,12 +17,15 @@ class GameEngine {
         this.achievements = new AchievementSystem(this);
         this.statistics = new StatisticsSystem(this);
         this.tutorial = new TutorialSystem(this);
+        this.vfx = new VFXSystem();
+        this.sound = new SoundSystem();
         this.industries = JSON.parse(JSON.stringify(INDUSTRIES)); // Deep copy
         this.events = EVENTS;
         this.triggeredEvents = new Set();
 
         this.ui = null;
         this.lastUpdate = Date.now();
+        this.lastMoneyAmount = 0;
         this.tickRate = 100; // Update every 100ms
         this.eventCheckInterval = 5000; // Check for events every 5 seconds
         this.lastEventCheck = Date.now();
@@ -44,6 +49,12 @@ class GameEngine {
         // Initialize UI
         this.ui = new UIManager(this);
         this.ui.update();
+
+        // Initialize VFX
+        this.vfx.init();
+
+        // Store initial money
+        this.lastMoneyAmount = this.resources.get('wealth');
 
         // Start game loop
         this.start();
@@ -93,6 +104,24 @@ class GameEngine {
         // Update resources
         this.resources.update(deltaTime);
 
+        // Check for money gain and show floating numbers
+        const currentMoney = this.resources.get('wealth');
+        if (currentMoney > this.lastMoneyAmount) {
+            const gain = Math.floor(currentMoney - this.lastMoneyAmount);
+            if (gain > 0 && Math.random() < 0.1) { // 10% chance to show
+                const wealthCard = document.querySelector('.metric-card.wealth');
+                if (wealthCard) {
+                    const rect = wealthCard.getBoundingClientRect();
+                    this.vfx.showFloatingNumber(
+                        this.resources.resources.wealth.format(gain),
+                        rect.left + rect.width / 2,
+                        rect.top + rect.height / 2
+                    );
+                }
+            }
+        }
+        this.lastMoneyAmount = currentMoney;
+
         // Check for industry unlocks
         this.checkUnlocks();
 
@@ -138,6 +167,9 @@ class GameEngine {
         // Record event stats
         this.statistics.recordEventTriggered(event.type);
 
+        // Sound
+        this.sound.playEvent();
+
         if (event.choices) {
             // Decision event
             this.decisions.presentDecision(event);
@@ -179,6 +211,21 @@ class GameEngine {
         this.statistics.recordIndustryBought();
         this.statistics.recordMoneySpent(cost.wealth || 0);
 
+        // VFX and Sound
+        this.sound.playPurchase();
+        // Find industry element for particles
+        const industryElements = document.querySelectorAll('.industry-item');
+        industryElements.forEach(el => {
+            if (el.textContent.includes(industry.name)) {
+                const rect = el.getBoundingClientRect();
+                this.vfx.createParticleBurst(
+                    rect.left + rect.width / 2,
+                    rect.top + rect.height / 2,
+                    15
+                );
+            }
+        });
+
         // Tutorial check
         if (this.tutorial.active && industry.id === 'lemonade' && industry.count === 1) {
             this.tutorial.onFirstIndustryBought();
@@ -204,6 +251,11 @@ class GameEngine {
                 const canUnlock = checkUnlock(industry, this.resources);
                 if (canUnlock) {
                     industry.unlocked = true;
+
+                    // Sound and VFX
+                    this.sound.playUnlock();
+                    this.vfx.shakeScreen(5, 200);
+
                     this.ui.showMessage(
                         `🔓 Nouvelle industrie disponible: ${industry.name}`,
                         'positive'

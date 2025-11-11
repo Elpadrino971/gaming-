@@ -207,6 +207,16 @@ export class UIManager {
         // Add to body
         document.body.appendChild(notification);
 
+        // Sound and VFX
+        this.game.sound.playAchievement();
+        const rect = notification.getBoundingClientRect();
+        this.game.vfx.createConfetti(
+            window.innerWidth / 2,
+            rect.top + rect.height / 2,
+            50
+        );
+        this.game.vfx.shakeScreen(8, 300);
+
         // Animate in
         setTimeout(() => notification.classList.add('show'), 10);
 
